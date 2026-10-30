@@ -1,5 +1,5 @@
 // Offline-Unterstützung: lädt immer zuerst die neueste Version, sonst aus dem Cache.
-const CACHE = 'hola-v1';
+const CACHE = 'hola-v2';
 const FILES = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

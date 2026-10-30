@@ -184,7 +184,7 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const pick = a => a[Math.floor(Math.random()*a.length)];
 const dots = n => '<span class="dots">' + [0,1,2,3,4].map(i => `<b class="${i<n?'on':''}"></b>`).join('') + '</span>';
-const top = () => window.scrollTo(0,0);
+const toTop = () => window.scrollTo(0,0);
 
 /* Aussprache (iPhone: Klingelschalter muss evtl. auf laut stehen) */
 let esVoice = null;
@@ -192,7 +192,7 @@ function loadVoices(){
   const v = speechSynthesis.getVoices();
   esVoice = v.find(x => x.lang === 'es-ES') || v.find(x => x.lang && x.lang.startsWith('es')) || null;
 }
-if ('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+try { if ('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; } } catch(e) {}
 function say(t){
   if (!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
@@ -242,7 +242,7 @@ function home(){
     <p class="muted small">🔊 Kein Ton? Stummschalter am iPhone prüfen.</p>
     <button class="link" onclick="resetAll()">Fortschritt zurücksetzen</button>
   </div>`;
-  top();
+  toTop();
 }
 function resetAll(){
   if (confirm('Wirklich den gesamten Fortschritt löschen?')){
@@ -265,7 +265,7 @@ function openTopic(id){
       <li><button class="speak" data-say="${esc(es)}" aria-label="Anhören">🔊</button>
       <div class="w"><b>${esc(es)}</b><span class="muted small">${esc(de)}</span></div>${dots(lv(es))}</li>`).join('')}
   </ul>`;
-  top();
+  toTop();
 }
 
 /* ============ Karteikarten ============ */
@@ -373,7 +373,7 @@ function qView(){
   </main>`;
   L.answered = false;
   if (q.type === 'listen') say(q.w.es);
-  top();
+  toTop();
 }
 function ins(c){
   const i = document.getElementById('ans'); if (!i || i.disabled) return;
@@ -430,12 +430,12 @@ function resultView(){
       <button class="btn" onclick="${back}">Fertig</button>
     </div>
   </div>`;
-  top();
+  toTop();
 }
 
 /* ============ Start ============ */
 home();
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {}); } catch(e) {}
 </script>
 </body>
 </html>
